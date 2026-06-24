@@ -275,7 +275,6 @@ async def get_activity():
 
 app.include_router(session_router)
 app.include_router(tool_router)
-app.include_router(role_router)
 app.include_router(report_router)
 app.include_router(config_router)
 app.include_router(system_router)
