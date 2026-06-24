@@ -93,9 +93,7 @@
                 {{ backendStatus ? '正常运行' : '异常' }}
               </el-tag>
             </div>
-            <div class="status-item">
-              <span class="status-label">当前角色</span>
-            </div>
+
             <div class="status-item">
               <span class="status-label">运行时长</span>
               <span class="status-value">{{ uptime }}</span>

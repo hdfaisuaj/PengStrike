@@ -25,10 +25,7 @@
           <el-icon><Tools /></el-icon>
           <template #title>工具列表</template>
         </el-menu-item>
-        <el-menu-item index="/roles">
-          <el-icon><UserFilled /></el-icon>
-          <template #title>角色管理</template>
-        </el-menu-item>
+
         <el-menu-item index="/reports">
           <el-icon><Document /></el-icon>
           <template #title>报告管理</template>
@@ -98,7 +95,6 @@ const routeTitles = {
   '/dashboard': '仪表盘',
   '/sessions': '会话列表',
   '/tools': '工具列表',
-  '/roles': '角色管理',
   '/reports': '报告管理',
   '/settings': '系统设置'
 }
