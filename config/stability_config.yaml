@@ -1,0 +1,139 @@
+# ============================================================
+# PengStrike 稳定性系统配置文件
+# 三级自愈 + 资源优化 + 混沌工程
+# ============================================================
+
+# 进程健康监控配置
+health_monitor:
+  enabled: true
+  check_interval: 30           # 检查间隔（秒）
+  heartbeat_timeout: 120       # 心跳超时（秒）
+  max_restarts: 5              # 最大重启次数
+  restart_cooldown: 300        # 重启冷却时间（秒）
+  log_dir: "logs/health"
+
+# 数据库备份配置
+database_backup:
+  enabled: true
+  db_path: "pentest.db"
+  backup_dir: "db/backups"
+  max_backups: 24              # 保留备份数量
+  backup_interval: 3600        # 备份间隔（秒）= 1小时
+  auto_verify: true            # 自动验证备份完整性
+  enable_cron: true
+
+# LLM负载均衡配置
+llm_load_balancer:
+  enabled: true
+  health_check_interval: 60    # 健康检查间隔（秒）
+  failure_threshold: 3         # 失败阈值
+  circuit_break_duration: 300  # 熔断持续时间（秒）
+  recovery_timeout: 60         # 恢复超时（秒）
+  max_latency_samples: 50
+  default_strategy: "priority"  # priority/latency/round_robin/weighted/least_used
+  config_file: "config/llm_endpoints.json"
+
+# LLM端点配置示例
+llm_endpoints:
+  - name: "openai-primary"
+    base_url: "https://api.openai.com/v1"
+    api_key: "${OPENAI_API_KEY}"
+    model: "gpt-3.5-turbo"
+    priority: 10
+    weight: 100
+    timeout: 30
+    max_retries: 3
+
+  - name: "openai-fallback"
+    base_url: "https://api.openai.com/v1"
+    api_key: "${OPENAI_API_KEY_BACKUP}"
+    model: "gpt-3.5-turbo"
+    priority: 20
+    weight: 50
+    timeout: 30
+    max_retries: 3
+
+# 自愈引擎配置
+self_healing:
+  enabled: true
+  enable_escalation: true      # 启用自愈级别升级
+  max_healing_attempts: 5
+  log_dir: "logs/healing"
+  history_limit: 1000
+
+# 资源追踪配置
+resource_tracker:
+  enabled: true
+  sample_interval: 5            # 采样间隔（秒）
+  history_size: 2880            # 历史记录数量（4小时 * 12样本/分钟）
+  log_dir: "logs/resource"
+  alert_thresholds:
+    cpu_warning: 70
+    cpu_critical: 90
+    memory_warning: 75
+    memory_critical: 90
+    disk_warning: 80
+    disk_critical: 95
+
+# 智能清理配置
+cleanup_scheduler:
+  enabled: true
+  check_interval: 3600          # 检查间隔（秒）= 1小时
+  log_dir: "logs/cleanup"
+  base_dir: "."
+
+  # 清理规则
+  rules:
+    - name: "old_logs"
+      path: "logs"
+      pattern: "*.log"
+      max_age_hours: 168        # 7天
+      max_count: 100
+      min_free_disk_percent: 10
+      enabled: true
+
+    - name: "temp_files"
+      path: "cache"
+      pattern: "*"
+      max_age_hours: 24         # 1天
+      max_count: 500
+      min_free_disk_percent: 15
+      enabled: true
+
+    - name: "old_reports"
+      path: "reports"
+      pattern: "*.html *.json *.md"
+      max_age_hours: 720        # 30天
+      max_count: 1000
+      min_free_disk_percent: 5
+      enabled: true
+
+    - name: "pycache"
+      path: "."
+      pattern: "**/__pycache__/**"
+      max_age_hours: 24
+      max_count: 10000
+      min_free_disk_percent: 0   # 总是清理
+      enabled: true
+
+# 混沌工程配置
+chaos_engine:
+  enabled: true
+  safe_mode: true               # 安全模式（不执行破坏性操作）
+  max_duration: 300             # 最大实验持续时间（秒）
+  log_dir: "logs/chaos"
+
+  # 可用故障类型
+  available_faults:
+    - "cpu_stress"
+    - "memory_stress"
+    - "api_delay"
+    - "api_error"
+    - "process_kill"
+
+# ============================================================
+# 上线开关 - 生产环境根据需要调整
+# ============================================================
+production:
+  auto_start: true              # 启动时自动启用所有稳定性模块
+  enable_chaos_in_production: false  # 生产环境默认禁用混沌实验

@@ -1,0 +1,1697 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "execute_kali_command",
+      "description": "在 Kali Linux 本地执行渗透测试相关的系统命令并返回完整输出。支持的工具包括：nmap, wapiti, nikto, sqlmap, hydra, gobuster, dirsearch, searchsploit, curl, whoami, uname, cat, ls, ping, netstat 等。执行前建议先用 which 检查工具是否存在。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "要执行的命令（含参数），例如 'nmap -sC -sV 10.0.0.1'"
+          }
+        },
+        "required": [
+          "command"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "save_exploit",
+      "description": "将 searchsploit 搜索结果中的 exploit 源文件复制到项目的 exploit/ 目录并返回保存路径。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "source_path": {
+            "type": "string",
+            "description": "searchsploit 返回的 exploit 源文件绝对路径"
+          }
+        },
+        "required": [
+          "source_path"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "amass",
+      "description": "Amass DNS 枚举和子域名发现工具，支持被动/主动/枚举模式。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string",
+            "description": "目标域名"
+          },
+          "mode": {
+            "type": "string",
+            "description": "模式: passive/active/enum",
+            "default": "passive"
+          },
+          "wordlist": {
+            "type": "string",
+            "description": "字典路径（enum模式）",
+            "default": ""
+          },
+          "output_format": {
+            "type": "string",
+            "description": "输出格式: json/text",
+            "default": "json"
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "domain"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "bloodhound",
+      "description": "BloodHound Python (Sharphound) 域环境分析工具，收集 AD 攻击路径信息并输出 JSON。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string",
+            "description": "目标域名"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名",
+            "default": ""
+          },
+          "password": {
+            "type": "string",
+            "description": "密码",
+            "default": ""
+          },
+          "domain_controller": {
+            "type": "string",
+            "description": "域控制器",
+            "default": ""
+          },
+          "collection_methods": {
+            "type": "string",
+            "description": "收集方法: Default/Sessions/LoggedOn/Acl/Group",
+            "default": "Default"
+          },
+          "output_dir": {
+            "type": "string",
+            "description": "输出目录",
+            "default": "/tmp/bloodhound"
+          }
+        },
+        "required": [
+          "domain"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "burpsuite",
+      "description": "Burp Suite Web 漏洞扫描器（GUI工具）",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "target 参数"
+          },
+          "scan_type": {
+            "type": "string",
+            "description": "scan_type 参数"
+          },
+          "config": {
+            "type": "string",
+            "description": "config 参数"
+          }
+        },
+        "required": [
+          "target",
+          "scan_type",
+          "config"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "cewl",
+      "description": "CeWL 从网站生成字典工具",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "url 参数"
+          },
+          "depth": {
+            "type": "string",
+            "description": "depth 参数"
+          },
+          "min_word_len": {
+            "type": "string",
+            "description": "min_word_len 参数"
+          },
+          "output": {
+            "type": "string",
+            "description": "output 参数"
+          }
+        },
+        "required": [
+          "url",
+          "depth",
+          "min_word_len",
+          "output"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "commix",
+      "description": "Commix 命令注入检测和利用工具",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "url 参数"
+          },
+          "technique": {
+            "type": "string",
+            "description": "technique 参数"
+          },
+          "level": {
+            "type": "string",
+            "description": "level 参数"
+          },
+          "batch": {
+            "type": "string",
+            "description": "batch 参数"
+          }
+        },
+        "required": [
+          "url",
+          "technique",
+          "level",
+          "batch"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "crackmapexec",
+      "description": "CrackMapExec 内网域渗透工具，支持 SMB/WinRM/LDAP/SSH 协议的信息收集和横向移动。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "目标 IP/CIDR/主机名列表文件"
+          },
+          "protocol": {
+            "type": "string",
+            "description": "协议: smb/winrm/ldap/ssh",
+            "default": "smb"
+          },
+          "action": {
+            "type": "string",
+            "description": "操作: info/users/shares/sessions/lootsam",
+            "default": "info"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名",
+            "default": ""
+          },
+          "password": {
+            "type": "string",
+            "description": "密码",
+            "default": ""
+          },
+          "hash": {
+            "type": "string",
+            "description": "NTLM Hash",
+            "default": ""
+          },
+          "dc": {
+            "type": "string",
+            "description": "域控制器 IP",
+            "default": ""
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "target"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "crtsh",
+      "description": "通过 Certificate Transparency 日志发现子域名（被动收集，无需发送流量到目标）。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string",
+            "description": "目标域名"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "最大返回条数",
+            "default": 1000
+          }
+        },
+        "required": [
+          "domain"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "crunch",
+      "description": "Crunch 字典生成工具",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "min_len": {
+            "type": "string",
+            "description": "min_len 参数"
+          },
+          "max_len": {
+            "type": "string",
+            "description": "max_len 参数"
+          },
+          "charset": {
+            "type": "string",
+            "description": "charset 参数"
+          },
+          "output": {
+            "type": "string",
+            "description": "output 参数"
+          }
+        },
+        "required": [
+          "min_len",
+          "max_len",
+          "charset",
+          "output"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "curl",
+      "description": "Curl HTTP 客户端工具，支持自定义 Header/Method/Body/认证，用于 Web 测试。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "目标 URL"
+          },
+          "method": {
+            "type": "string",
+            "description": "HTTP 方法",
+            "default": "GET"
+          },
+          "headers": {
+            "type": "string",
+            "description": "自定义 Header（JSON 格式）",
+            "default": ""
+          },
+          "data": {
+            "type": "string",
+            "description": "POST 数据",
+            "default": ""
+          },
+          "user_agent": {
+            "type": "string",
+            "description": "User-Agent",
+            "default": "PengStrike/3.0"
+          },
+          "follow_redirects": {
+            "type": "boolean",
+            "description": "跟随重定向",
+            "default": true
+          },
+          "insecure": {
+            "type": "boolean",
+            "description": "忽略 SSL 证书错误",
+            "default": true
+          },
+          "timeout": {
+            "type": "integer",
+            "description": "超时秒数",
+            "default": 30
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "dig",
+      "description": "Dig DNS 查询工具，支持 A/AAAA/MX/NS/TXT/SPF/DMARC 等记录类型。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "查询目标（域名）"
+          },
+          "record_type": {
+            "type": "string",
+            "description": "记录类型: A/AAAA/MX/NS/TXT/SOA/ANY",
+            "default": "A"
+          },
+          "server": {
+            "type": "string",
+            "description": "指定 DNS 服务器",
+            "default": ""
+          },
+          "short": {
+            "type": "boolean",
+            "description": "简短输出",
+            "default": false
+          }
+        },
+        "required": [
+          "target"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "dnsrecon",
+      "description": "DNSRecon DNS 枚举和扫描工具",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string",
+            "description": "domain 参数"
+          },
+          "type": {
+            "type": "string",
+            "description": "type 参数"
+          },
+          "output": {
+            "type": "string",
+            "description": "output 参数"
+          }
+        },
+        "required": [
+          "domain",
+          "type",
+          "output"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "enum4linux",
+      "description": "enum4linux SMB/Windows 信息枚举工具，收集用户/共享/策略/密码策略等。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "目标 IP"
+          },
+          "options": {
+            "type": "string",
+            "description": "选项: -U(用户) -S(共享) -P(密码策略) -G(组)",
+            "default": "-U -S -P -G -a"
+          }
+        },
+        "required": [
+          "target"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "evil-winrm",
+      "description": "Evil-WinRM Windows 远程管理利用工具，通过 WinRM 获取交互式 Shell（支持 Pass-the-Hash）。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "目标 IP"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名",
+            "default": ""
+          },
+          "password": {
+            "type": "string",
+            "description": "密码",
+            "default": ""
+          },
+          "hash": {
+            "type": "string",
+            "description": "NTLM Hash",
+            "default": ""
+          },
+          "command": {
+            "type": "string",
+            "description": "要执行的命令",
+            "default": ""
+          }
+        },
+        "required": [
+          "target"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "ffuf",
+      "description": "Ffuf 快速 Web 模糊测试工具，用于目录/子域名/参数 fuzz。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "目标 URL（FUZZ 替换位置）"
+          },
+          "wordlist": {
+            "type": "string",
+            "description": "字典路径"
+          },
+          "mode": {
+            "type": "string",
+            "description": "模式: url/dir/subdomain/url",
+            "default": "dir"
+          },
+          "threads": {
+            "type": "integer",
+            "description": "并发数",
+            "default": 40
+          },
+          "match_codes": {
+            "type": "string",
+            "description": "匹配的状态码（如 200,204,301）",
+            "default": "200-399"
+          },
+          "timeout": {
+            "type": "integer",
+            "description": "超时秒数",
+            "default": 30
+          },
+          "output_format": {
+            "type": "string",
+            "description": "输出格式: json/euclidean",
+            "default": "json"
+          }
+        },
+        "required": [
+          "url",
+          "wordlist"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "fierce",
+      "description": "Fierce DNS 枚举工具",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string",
+            "description": "domain 参数"
+          },
+          "wordlist": {
+            "type": "string",
+            "description": "wordlist 参数"
+          },
+          "output": {
+            "type": "string",
+            "description": "output 参数"
+          }
+        },
+        "required": [
+          "domain",
+          "wordlist",
+          "output"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "gobuster",
+      "description": "Gobuster 目录、子域名、虚拟主机爆破工具，支持多种模式。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "description": "模式: dir/dns/vhost/fuzz",
+            "default": "dir"
+          },
+          "url": {
+            "type": "string",
+            "description": "目标 URL（dir/vhost/fuzz 模式）"
+          },
+          "domain": {
+            "type": "string",
+            "description": "目标域名（dns 模式）"
+          },
+          "wordlist": {
+            "type": "string",
+            "description": "字典路径"
+          },
+          "extensions": {
+            "type": "string",
+            "description": "文件扩展名（如 php,html,txt）",
+            "default": ""
+          },
+          "threads": {
+            "type": "integer",
+            "description": "并发线程数",
+            "default": 10
+          },
+          "timeout": {
+            "type": "integer",
+            "description": "超时秒数",
+            "default": 10
+          },
+          "output_format": {
+            "type": "string",
+            "description": "输出格式: json/status/raw",
+            "default": "json"
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "wordlist"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "hashcat",
+      "description": "Hashcat 高性能密码破解工具",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "hash_file": {
+            "type": "string",
+            "description": "hash_file 参数"
+          },
+          "wordlist": {
+            "type": "string",
+            "description": "wordlist 参数"
+          },
+          "attack_mode": {
+            "type": "string",
+            "description": "attack_mode 参数"
+          },
+          "hash_type": {
+            "type": "string",
+            "description": "hash_type 参数"
+          }
+        },
+        "required": [
+          "hash_file",
+          "wordlist",
+          "attack_mode",
+          "hash_type"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "hydra",
+      "description": "Hydra 在线暴力破解工具，支持 SSH/FTP/HTTP/SMB/MySQL 等 50+ 协议。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "目标 IP 或服务名"
+          },
+          "service": {
+            "type": "string",
+            "description": "服务: ssh/ftp/http-get/mysql/postgres/smb/rdp 等"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名或用户名文件"
+          },
+          "password_list": {
+            "type": "string",
+            "description": "密码文件路径"
+          },
+          "port": {
+            "type": "integer",
+            "description": "指定端口",
+            "default": 0
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": "-V -f"
+          }
+        },
+        "required": [
+          "target",
+          "service",
+          "username",
+          "password_list"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "impacket",
+      "description": "Impacket 工具集 Python 包装，支持 secretsdump/psexec/wmiexec/ntlmrelayx/smbclient 等。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "script": {
+            "type": "string",
+            "description": "Impacket 脚本名: secretsdump/psexec/wmiexec/ntlmrelayx/smbclient"
+          },
+          "target": {
+            "type": "string",
+            "description": "目标"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名",
+            "default": ""
+          },
+          "password": {
+            "type": "string",
+            "description": "密码",
+            "default": ""
+          },
+          "domain": {
+            "type": "string",
+            "description": "域名",
+            "default": ""
+          },
+          "hash": {
+            "type": "string",
+            "description": "NTLM Hash",
+            "default": ""
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "script",
+          "target"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "john",
+      "description": "John the Ripper 密码破解工具",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "hash_file": {
+            "type": "string",
+            "description": "hash_file 参数"
+          },
+          "wordlist": {
+            "type": "string",
+            "description": "wordlist 参数"
+          },
+          "format": {
+            "type": "string",
+            "description": "format 参数"
+          },
+          "rules": {
+            "type": "string",
+            "description": "rules 参数"
+          }
+        },
+        "required": [
+          "hash_file",
+          "wordlist",
+          "format",
+          "rules"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "linenum",
+      "description": "LinEnum Linux 本地枚举脚本，检查系统信息/网络/用户/计划任务/服务等。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "output_file": {
+            "type": "string",
+            "description": "输出文件",
+            "default": "/tmp/linenum_output.txt"
+          },
+          "options": {
+            "type": "string",
+            "description": "选项: -s(敏感) -k(密码) -r(可靠)",
+            "default": "-s -k"
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "linpeas",
+      "description": "LinPEAS Linux 提权辅助枚举脚本，全面检查 SUID/Sudo/Cron/NFS/容器/内核漏洞等提权路径。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "script_path": {
+            "type": "string",
+            "description": "linpeas.sh 脚本路径（默认自动搜索常见位置）",
+            "default": ""
+          },
+          "output_file": {
+            "type": "string",
+            "description": "输出文件路径",
+            "default": ""
+          },
+          "color": {
+            "type": "string",
+            "description": "输出颜色: 0(无)/1(暗)/2(亮)",
+            "default": "2"
+          },
+          "options": {
+            "type": "string",
+            "description": "额外选项: quiet/notcolor/superquiet/json/sh",
+            "default": ""
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "masscan",
+      "description": "Masscan 高速批量端口扫描器，速度可达每秒百万包，支持自定义速率。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "targets": {
+            "type": "string",
+            "description": "目标 IP/CIDR 范围"
+          },
+          "ports": {
+            "type": "string",
+            "description": "端口范围（如 1-10000,443,80）"
+          },
+          "rate": {
+            "type": "integer",
+            "description": "发包速率（每秒包数）",
+            "default": 10000
+          },
+          "open_only": {
+            "type": "boolean",
+            "description": "仅显示开放端口",
+            "default": true
+          },
+          "json": {
+            "type": "boolean",
+            "description": "JSON 输出格式",
+            "default": true
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "targets",
+          "ports"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "msfconsole",
+      "description": "Metasploit Framework 控制台，支持模块搜索、配置和利用执行（通过批处理命令）。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "msfconsole 命令（多行用 ; 分隔）"
+          },
+          "payload": {
+            "type": "string",
+            "description": "可选: payload 配置",
+            "default": ""
+          },
+          "options": {
+            "type": "string",
+            "description": "模块选项（key=value,key=value 格式）",
+            "default": ""
+          },
+          "batch": {
+            "type": "boolean",
+            "description": "批处理模式（-q 静默）",
+            "default": true
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "command"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "nc",
+      "description": "Netcat 网络瑞士军刀，支持端口扫描/反弹 Shell/文件传输/代理等。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "操作: listen/scan/connect"
+          },
+          "target": {
+            "type": "string",
+            "description": "目标 IP（connect/scan 模式）",
+            "default": ""
+          },
+          "port": {
+            "type": "integer",
+            "description": "端口"
+          },
+          "command": {
+            "type": "string",
+            "description": "交互式 Shell 命令",
+            "default": ""
+          },
+          "listen_timeout": {
+            "type": "integer",
+            "description": "监听超时秒数",
+            "default": 10
+          }
+        },
+        "required": [
+          "action",
+          "port"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "nessus",
+      "description": "Nessus 漏洞扫描器（需要单独部署）",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "target 参数"
+          },
+          "policy": {
+            "type": "string",
+            "description": "policy 参数"
+          },
+          "credentials": {
+            "type": "string",
+            "description": "credentials 参数"
+          }
+        },
+        "required": [
+          "target",
+          "policy",
+          "credentials"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "netstat",
+      "description": "Netstat 网络连接状态查看工具（支持 -tulpn）。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "options": {
+            "type": "string",
+            "description": "netstat 选项: tulpn/all/ano",
+            "default": "tulpn"
+          },
+          "target": {
+            "type": "string",
+            "description": "过滤目标 IP",
+            "default": ""
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "nikto",
+      "description": "Nikto Web 服务器安全扫描器，检测潜在漏洞、配置问题、危险文件。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "目标 URL 或 IP:PORT"
+          },
+          "ssl": {
+            "type": "boolean",
+            "description": "强制 SSL/HTTPS",
+            "default": false
+          },
+          "tuning": {
+            "type": "string",
+            "description": "扫描类型: 1-9/x/i/e (参考 nikto 文档)",
+            "default": ""
+          },
+          "output_format": {
+            "type": "string",
+            "description": "输出格式: xml/json/csv/text",
+            "default": "json"
+          },
+          "dbcheck": {
+            "type": "boolean",
+            "description": "仅检查 nikto 数据库",
+            "default": false
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "target"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "nmap",
+      "description": "网络扫描工具，支持主机发现、端口扫描、服务探测、OS探测、NSE脚本扫描。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "targets": {
+            "type": "string",
+            "description": "目标（IP/CIDR/主机名）"
+          },
+          "scan_type": {
+            "type": "string",
+            "description": "扫描类型: syn/tcp/udp/ping",
+            "default": "syn"
+          },
+          "ports": {
+            "type": "string",
+            "description": "端口范围（如 1-1000,22,80)",
+            "default": ""
+          },
+          "scripts": {
+            "type": "string",
+            "description": "NSE 脚本（默认 -sC）",
+            "default": "default"
+          },
+          "service_detect": {
+            "type": "boolean",
+            "description": "启用服务版本探测",
+            "default": true
+          },
+          "os_detect": {
+            "type": "boolean",
+            "description": "启用 OS 探测",
+            "default": false
+          },
+          "top_ports": {
+            "type": "integer",
+            "description": "扫描最常见的 N 个端口",
+            "default": 0
+          },
+          "timing": {
+            "type": "integer",
+            "description": "时序级别 0-5（T0-T5）",
+            "default": 4
+          },
+          "output_format": {
+            "type": "string",
+            "description": "输出格式: xml/json/grepable/normal",
+            "default": "xml"
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "targets"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "nmap_script",
+      "description": "直接执行 Nmap NSE 脚本（如 http-enum, smb-vuln*, ssl-*, dns-*）。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "目标"
+          },
+          "script": {
+            "type": "string",
+            "description": "NSE 脚本名（如 http-enum, smb-vuln-ms17-010）"
+          },
+          "script_args": {
+            "type": "string",
+            "description": "脚本参数（如 smbuser=admin）",
+            "default": ""
+          },
+          "port": {
+            "type": "string",
+            "description": "指定端口",
+            "default": ""
+          },
+          "extra_nmap_args": {
+            "type": "string",
+            "description": "额外 nmap 参数",
+            "default": "-sV"
+          }
+        },
+        "required": [
+          "target",
+          "script"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "nuclei",
+      "description": "Nuclei 漏洞扫描器，使用 YAML 模板进行快速、可定制化漏洞检测。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "目标 URL/主机/文件"
+          },
+          "templates": {
+            "type": "string",
+            "description": "模板路径或关键字（如 dns/http/cves）",
+            "default": ""
+          },
+          "severity": {
+            "type": "string",
+            "description": "过滤严重性: info/low/medium/high/critical",
+            "default": ""
+          },
+          "rate_limit": {
+            "type": "integer",
+            "description": "每秒请求数",
+            "default": 150
+          },
+          "threads": {
+            "type": "integer",
+            "description": "并发线程数",
+            "default": 50
+          },
+          "tags": {
+            "type": "string",
+            "description": "模板标签（如 sqli,xss）",
+            "default": ""
+          },
+          "output_format": {
+            "type": "string",
+            "description": "输出格式: json/jsonl/list/csv",
+            "default": "json"
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "target"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "openvas",
+      "description": "OpenVAS 漏洞扫描器（需要单独部署）",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "target 参数"
+          },
+          "scan_config": {
+            "type": "string",
+            "description": "scan_config 参数"
+          },
+          "report_format": {
+            "type": "string",
+            "description": "report_format 参数"
+          }
+        },
+        "required": [
+          "target",
+          "scan_config",
+          "report_format"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "ping",
+      "description": "Ping ICMP 主机可达性检测。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "目标 IP 或主机名"
+          },
+          "count": {
+            "type": "integer",
+            "description": "发送数据包数量",
+            "default": 4
+          },
+          "timeout": {
+            "type": "integer",
+            "description": "超时秒数",
+            "default": 5
+          }
+        },
+        "required": [
+          "target"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "reaver",
+      "description": "Reaver WPS 暴力破解工具",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "interface": {
+            "type": "string",
+            "description": "interface 参数"
+          },
+          "bssid": {
+            "type": "string",
+            "description": "bssid 参数"
+          },
+          "channel": {
+            "type": "string",
+            "description": "channel 参数"
+          }
+        },
+        "required": [
+          "interface",
+          "bssid",
+          "channel"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "responder",
+      "description": "Responder LLMNR/NBT-NS/mDNS 投毒工具，用于内网凭证窃取（NTLMv1/v2 Hash）。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "interface": {
+            "type": "string",
+            "description": "监听网络接口（如 eth0）",
+            "default": "eth0"
+          },
+          "analyze": {
+            "type": "boolean",
+            "description": "分析模式（不投毒）",
+            "default": false
+          },
+          "output_file": {
+            "type": "string",
+            "description": "输出文件",
+            "default": "/tmp/responder.db"
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "searchsploit",
+      "description": "Exploit-DB 漏洞库本地检索工具，搜索已知漏洞的 Exploit 和 PoC。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "搜索关键词"
+          },
+          "exact": {
+            "type": "boolean",
+            "description": "精确匹配",
+            "default": false
+          },
+          "title_only": {
+            "type": "boolean",
+            "description": "仅搜索标题",
+            "default": false
+          },
+          "json": {
+            "type": "boolean",
+            "description": "JSON 输出",
+            "default": true
+          },
+          "limit": {
+            "type": "integer",
+            "description": "最大结果数",
+            "default": 20
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "sqlmap",
+      "description": "Sqlmap 自动 SQL 注入检测与利用工具，支持多种注入技术、数据库枚举、Shell 获取。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "目标 URL"
+          },
+          "method": {
+            "type": "string",
+            "description": "HTTP 方法: GET/POST",
+            "default": "GET"
+          },
+          "data": {
+            "type": "string",
+            "description": "POST 数据",
+            "default": ""
+          },
+          "cookie": {
+            "type": "string",
+            "description": "Cookie 值",
+            "default": ""
+          },
+          "level": {
+            "type": "integer",
+            "description": "检测级别 1-5",
+            "default": 1
+          },
+          "risk": {
+            "type": "integer",
+            "description": "测试风险级别 1-3",
+            "default": 1
+          },
+          "technique": {
+            "type": "string",
+            "description": "注入技术: B/E/U/S/T/Q",
+            "default": "BEUSTQ"
+          },
+          "dbs": {
+            "type": "boolean",
+            "description": "枚举数据库",
+            "default": false
+          },
+          "tables": {
+            "type": "boolean",
+            "description": "枚举表",
+            "default": false
+          },
+          "dump": {
+            "type": "boolean",
+            "description": "Dump 数据",
+            "default": false
+          },
+          "os_shell": {
+            "type": "boolean",
+            "description": "获取 OS Shell",
+            "default": false
+          },
+          "batch": {
+            "type": "boolean",
+            "description": "非交互批处理模式",
+            "default": true
+          },
+          "output_format": {
+            "type": "string",
+            "description": "输出格式: text/json",
+            "default": "json"
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "sublist3r",
+      "description": "Sublist3r 子域名枚举工具",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string",
+            "description": "domain 参数"
+          },
+          "output": {
+            "type": "string",
+            "description": "output 参数"
+          },
+          "threads": {
+            "type": "string",
+            "description": "threads 参数"
+          }
+        },
+        "required": [
+          "domain",
+          "output",
+          "threads"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "suid3num",
+      "description": "suid3num 快速枚举 Linux SUID 文件并检索已知提权路径（GTFOBins）。",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "theharvester",
+      "description": "TheHarvester 邮箱和子域名收集工具",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string",
+            "description": "domain 参数"
+          },
+          "source": {
+            "type": "string",
+            "description": "source 参数"
+          },
+          "limit": {
+            "type": "string",
+            "description": "limit 参数"
+          }
+        },
+        "required": [
+          "domain",
+          "source",
+          "limit"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "whois",
+      "description": "Whois 域名/IP 信息查询。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "域名或 IP 地址"
+          }
+        },
+        "required": [
+          "target"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "winpeas",
+      "description": "WinPEAS Windows 提权辅助枚举脚本，检查服务/注册表/令牌/补丁/权限等。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "output_file": {
+            "type": "string",
+            "description": "输出文件路径",
+            "default": "C:\\temp\\winpeas_output.txt"
+          },
+          "options": {
+            "type": "string",
+            "description": "额外选项: notcolor quiet systeminfo",
+            "default": ""
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "wpscan",
+      "description": "WPScan WordPress 安全扫描器，检测插件/主题/用户/漏洞。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "WordPress 站点 URL"
+          },
+          "enumerate": {
+            "type": "string",
+            "description": "枚举内容: vp/vt/u/m (插件/主题/用户/媒体)",
+            "default": "vp,vt,u"
+          },
+          "plugins_detection": {
+            "type": "string",
+            "description": "插件检测模式: passive/aggressive/mixed",
+            "default": "passive"
+          },
+          "enumerate_all": {
+            "type": "boolean",
+            "description": "枚举所有插件",
+            "default": false
+          },
+          "api_token": {
+            "type": "string",
+            "description": "WPScan API Token（获取漏洞详情）",
+            "default": ""
+          },
+          "batch": {
+            "type": "boolean",
+            "description": "批处理模式",
+            "default": true
+          },
+          "output_format": {
+            "type": "string",
+            "description": "输出格式: json/cli",
+            "default": "json"
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "xsstrike",
+      "description": "XSStrike XSS 漏洞扫描与检测工具，支持 DOM 扫描和模糊测试。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "目标 URL"
+          },
+          "method": {
+            "type": "string",
+            "description": "HTTP 方法",
+            "default": "GET"
+          },
+          "data": {
+            "type": "string",
+            "description": "POST 数据",
+            "default": ""
+          },
+          "params": {
+            "type": "boolean",
+            "description": "扫描 URL 参数",
+            "default": true
+          },
+          "crawl": {
+            "type": "boolean",
+            "description": "爬取页面发现更多参数",
+            "default": false
+          },
+          "level": {
+            "type": "integer",
+            "description": "扫描深度级别",
+            "default": 3
+          },
+          "extra_args": {
+            "type": "string",
+            "description": "额外参数",
+            "default": ""
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    }
+  }
+]

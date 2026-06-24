@@ -1,0 +1,18 @@
+# PengStrike 中间件配置文件
+# 中间件按 priority 从小到大执行，数字越小优先级越高
+middlewares:
+  # 1. 错误翻译中间件 - 优先级最高，最先执行
+  - class: middleware.error_handler.ErrorTranslationMiddleware
+    name: error_translation
+    enabled: true
+    priority: 10
+    config:
+      log_level: ERROR
+
+  # 2. 参数验证中间件 - 验证请求参数
+  - class: middleware.param_validator.ParameterValidationMiddleware
+    name: param_validation
+    enabled: true
+    priority: 20
+    config:
+      strict_mode: false

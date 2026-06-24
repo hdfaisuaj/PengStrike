@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>渗透测试报告 - {{ target }}</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', 'Microsoft YaHei', -apple-system, sans-serif; line-height: 1.7; color: #e6edf3; background: #0d1117; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 30px; }
+  
+  /* 封面 */
+  .cover { background: linear-gradient(135deg, #161b22 0%, #1c2128 100%); border: 1px solid #30363d; border-radius: 12px; padding: 50px; text-align: center; margin-bottom: 30px; }
+  .cover h1 { color: #f85149; font-size: 28px; margin-bottom: 8px; letter-spacing: 1px; }
+  .cover .subtitle { color: #8b949e; font-size: 14px; }
+  .cover .meta-row { display: flex; justify-content: center; gap: 30px; margin-top: 24px; flex-wrap: wrap; }
+  .cover .meta-item { text-align: center; }
+  .cover .meta-item .num { font-size: 24px; font-weight: 700; color: #58a6ff; }
+  .cover .meta-item .lbl { font-size: 11px; color: #8b949e; margin-top: 2px; }
+  
+  /* 风险等级 */
+  .risk-bar { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
+  .risk-item { padding: 8px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; text-align: center; min-width: 80px; }
+  .risk-high { background: #4a1b1b; color: #ff7b72; border: 1px solid #da3633; }
+  .risk-mid { background: #4a3a1b; color: #d29922; border: 1px solid #bb8009; }
+  .risk-low { background: #1b2d4a; color: #79c0ff; border: 1px solid #1f6feb; }
+  
+  /* 章节 */
+  .section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 24px; margin-bottom: 20px; }
+  .section h2 { color: #58a6ff; font-size: 18px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #21262d; display: flex; align-items: center; gap: 8px; }
+  
+  /* 表格 */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  th, td { padding: 8px 12px; border: 1px solid #30363d; text-align: left; }
+  th { background: #1c2128; color: #8b949e; font-weight: 600; }
+  td { color: #c9d1d9; }
+  tr:hover td { background: #1c2128; }
+  
+  /* 漏洞卡片 */
+  .finding { border: 1px solid #30363d; border-radius: 6px; padding: 16px; margin-bottom: 12px; background: #0d1117; }
+  .finding-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .finding-title { font-weight: 600; font-size: 14px; color: #c9d1d9; }
+  .sev-tag { padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .sev-high { background: #4a1b1b; color: #ff7b72; border: 1px solid #da3633; }
+  .sev-mid { background: #4a3a1b; color: #d29922; border: 1px solid #bb8009; }
+  .sev-low { background: #1b2d4a; color: #79c0ff; border: 1px solid #1f6feb; }
+  .finding-meta { font-size: 12px; color: #8b949e; margin-bottom: 8px; }
+  .finding-desc { font-size: 13px; color: #c9d1d9; }
+  .finding-desc pre { background: #0d1117; padding: 8px; border-radius: 4px; font-size: 12px; border: 1px solid #21262d; margin-top: 8px; max-height: 300px; overflow: auto; }
+  
+  code { background: #1c2128; padding: 1px 5px; border-radius: 3px; font-size: 12px; color: #f0883e; }
+  pre { background: #0d1117; padding: 12px; border-radius: 6px; font-size: 12px; border: 1px solid #21262d; overflow-x: auto; max-height: 250px; }
+  
+  .footer { text-align: center; color: #484f58; font-size: 12px; padding: 20px; border-top: 1px solid #21262d; margin-top: 30px; }
+  
+  .port-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 8px; margin: 12px 0; }
+  .port-card { background: #0d1117; border: 1px solid #30363d; border-radius: 4px; padding: 10px 12px; font-size: 13px; }
+  .port-num { color: #58a6ff; font-weight: 600; }
+  .port-svc { color: #7ee787; }
+  .port-ver { color: #8b949e; font-size: 12px; }
+  
+  details { margin: 8px 0; }
+  details summary { cursor: pointer; color: #58a6ff; font-size: 13px; padding: 4px 0; }
+  details pre { margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ==================== 封面 ==================== -->
+<div class="cover">
+  <h1>🛡️ 渗透测试报告</h1>
+  <div class="subtitle">PengStrike 自动生成 | {{ generated_at[:10] if generated_at else '' }}</div>
+  <div class="meta-row">
+    <div class="meta-item"><div class="num">{{ target }}</div><div class="lbl">测试目标</div></div>
+    <div class="meta-item"><div class="num">{{ steps_count }}</div><div class="lbl">执行步骤</div></div>
+    <div class="meta-item"><div class="num">{{ status }}</div><div class="lbl">测试状态</div></div>
+    <div class="meta-item"><div class="num">{{ generated_at[:10] if generated_at else 'N/A' }}</div><div class="lbl">报告日期</div></div>
+  </div>
+</div>
+
+<!-- ==================== 1. 执行摘要 ==================== -->
+<div class="section">
+  <h2>📋 1. 执行摘要</h2>
+  <p style="color:#c9d1d9;font-size:14px;margin-bottom:12px;">
+  本次渗透测试针对目标 <strong style="color:#58a6ff;">{{ target }}</strong> 执行了自动化安全评估。
+  测试范围涵盖端口扫描、服务枚举、漏洞扫描及利用尝试。
+  共执行 <strong style="color:#58a6ff;">{{ steps_count }}</strong> 个操作步骤，测试状态为 <strong style="color:#f85149;">{{ status }}</strong>。
+  </p>
+  
+  <div class="risk-bar">
+    <div class="risk-item risk-high">高危 {{ vuln_count_high }}</div>
+    <div class="risk-item risk-mid">中危 {{ vuln_count_mid }}</div>
+    <div class="risk-item risk-low">低危 {{ vuln_count_low }}</div>
+  </div>
+  
+  <p style="color:#8b949e;font-size:13px;">
+  关键发现：目标开放了 {{ ports|length }} 个服务端口，{% if vulnerabilities %}存在 {{ vulnerabilities|length }} 个潜在漏洞。{% else %}未发现明显高危漏洞。{% endif %}
+  </p>
+</div>
+
+<!-- ==================== 2. 测试范围 ==================== -->
+<div class="section">
+  <h2>🎯 2. 测试范围</h2>
+  <table>
+    <tr><th>项目</th><th>内容</th></tr>
+    <tr><td>目标地址</td><td><code>{{ target }}</code></td></tr>
+    <tr><td>测试方法</td><td>自动渗透测试 (AutoPilot)</td></tr>
+    <tr><td>扫描类型</td><td>信息收集 · 漏洞扫描 · 漏洞利用 · 后渗透</td></tr>
+    <tr><td>测试工具</td><td>nmap · wapiti · searchsploit · mysql</td></tr>
+  </table>
+</div>
+
+<!-- ==================== 3. 端口与服务清单 ==================== -->
+<div class="section">
+  <h2>🔌 3. 端口与服务清单</h2>
+  <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">发现以下开放端口和服务：</p>
+  <div class="port-grid">
+{% for port in ports %}
+    <div class="port-card"><code>{{ port }}</code></div>
+{% else %}
+    <p style="color:#8b949e;font-size:13px;">未发现开放端口。</p>
+{% endfor %}
+  </div>
+</div>
+
+<!-- ==================== 4. 漏洞发现 ==================== -->
+<div class="section">
+  <h2>⚠️ 4. 漏洞发现</h2>
+
+{% for vuln in vulnerabilities %}
+  <div class="finding">
+    <div class="finding-header">
+      <span class="sev-tag {{ 'sev-high' if vuln.severity == '高危' else 'sev-mid' if vuln.severity == '中危' else 'sev-low' }}">{{ vuln.severity }}</span>
+      <span class="finding-title">{{ vuln.desc[:80] }}{% if vuln.desc|length > 80 %}...{% endif %}</span>
+    </div>
+    <div class="finding-desc">
+      <p>{{ vuln.desc }}</p>
+    </div>
+  </div>
+{% else %}
+  <p style="color:#8b949e;font-size:13px;">本次测试未发现明确的漏洞。</p>
+{% endfor %}
+</div>
+
+<!-- ==================== 5. 凭证发现 ==================== -->
+<div class="section">
+  <h2>🔑 5. 凭证发现</h2>
+  <p style="color:#8b949e;font-size:13px;">本次测试未发现有效的登录凭证。</p>
+</div>
+
+<!-- ==================== 6. 修复建议 ==================== -->
+<div class="section">
+  <h2>🛠️ 6. 修复建议</h2>
+  <table>
+    <tr><th>优先级</th><th>建议</th></tr>
+    <tr><td><span class="sev-tag sev-mid">中</span></td><td>及时更新所有服务至最新安全版本，修复已知 CVE 漏洞</td></tr>
+    <tr><td><span class="sev-tag sev-mid">中</span></td><td>配置服务访问控制，限制不必要的远程连接</td></tr>
+    <tr><td><span class="sev-tag sev-low">低</span></td><td>关闭不必要的开放端口和服务，减少攻击面</td></tr>
+    <tr><td><span class="sev-tag sev-low">低</span></td><td>添加 HTTP 安全响应头（X-Frame-Options, CSP, HSTS 等）</td></tr>
+  </table>
+</div>
+
+<!-- ==================== 7. 操作日志（折叠） ==================== -->
+<div class="section">
+  <h2>📝 7. 操作日志</h2>
+  <details>
+    <summary>显示/隐藏全部操作记录（共 {{ steps_count }} 步）</summary>
+    <div class="timeline" style="margin-top:12px;">
+{% for step in steps %}
+{% set type = 'tool' if step.action_type == 'tool_execution' else 'ai' %}
+<div style="padding:8px 0;border-bottom:1px solid #21262d;font-size:13px;">
+  <span style="color:#8b949e;">#{{ step.seq }}</span>
+  <span style="color:#58a6ff;margin:0 8px;">{{ step.created_at }}</span>
+  {% if step.tool_args and step.tool_args.command %}
+  <code>{{ step.tool_args.command[:100] }}{% if step.tool_args.command|length > 100 %}...{% endif %}</code>
+  {% elif step.llm_content %}
+  <span style="color:#7ee787;">AI分析</span>
+  {% endif %}
+  {% if step.tool_success is not none %}
+  <span style="color:{{ '#7ee787' if step.tool_success else '#f85149' }};">{{ '✓' if step.tool_success else '✗' }}</span>
+  {% endif %}
+</div>
+{% endfor %}
+    </div>
+  </details>
+</div>
+
+<div class="footer">
+  <p>本报告由 PengStrike 自动生成 | 目标: {{ target }} | 报告时间: {{ generated_at[:19] if generated_at else '' }}</p>
+  <p style="margin-top:4px;color:#484f58;">⚠️ 本报告仅供授权测试使用，请勿用于非法用途</p>
+</div>
+
+</div>
+</body>
+</html>

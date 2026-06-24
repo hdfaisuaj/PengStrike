@@ -1,0 +1,43 @@
+{
+  "middlewares": [
+    {
+      "class": "middleware.builtin.IPBlacklistMiddleware",
+      "name": "ip_blacklist",
+      "enabled": true,
+      "priority": 10,
+      "config": {
+        "blacklist": ["192.168.1.100", "10.0.0.50"],
+        "whitelist": ["127.0.0.1", "::1"]
+      }
+    },
+    {
+      "class": "middleware.builtin.ASTCommandInjectionMiddleware",
+      "name": "ast_command_injection",
+      "enabled": true,
+      "priority": 20,
+      "config": {
+        "block_mode": true
+      }
+    },
+    {
+      "class": "middleware.builtin.AnomalyDetectionMiddleware",
+      "name": "anomaly_detection",
+      "enabled": true,
+      "priority": 30,
+      "config": {
+        "rate_limit": 60,
+        "block_anomalies": false
+      }
+    },
+    {
+      "class": "middleware.builtin.AuditLogMiddleware",
+      "name": "audit_log",
+      "enabled": true,
+      "priority": 100,
+      "config": {
+        "log_file": "logs/audit.log",
+        "log_level": "info"
+      }
+    }
+  ]
+}

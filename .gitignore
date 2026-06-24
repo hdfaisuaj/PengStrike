@@ -1,0 +1,123 @@
+# ========================
+# Python
+# ========================
+venv/
+venv_windows/
+env/
+ENV/
+*.py[cod]
+*$py.class
+*.so
+.Python
+__pycache__/
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+*.egg
+*.manifest
+
+# ========================
+# Node / Frontend
+# ========================
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite
+*.tsbuildinfo
+.npm
+.eslintcache
+.parcel-cache
+.cache/
+.DS_Store
+
+# ========================
+# 环境变量 & 敏感信息
+# ========================
+.env
+*.env
+*.env.local
+*.env.*.local
+.env*.local
+*.pem
+*.key
+
+# ========================
+# 项目运行时数据
+# ========================
+logs/
+*.log
+debug.log
+!logs/.gitkeep
+hydra.restore
+tmp_pentest/
+temp/
+backups/
+backup_*/
+reports_output/
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+data/cache/
+data/error_knowledge/
+data/reports/
+*.bak
+*.swp
+*.swo
+
+# ========================
+# 敏感配置文件（包含真实密钥）
+# ========================
+config.json
+*.pem
+*.key
+*.env.local
+
+# ========================
+# IDE & 编辑器
+# ========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.iml
+*.ipr
+*.iws
+.ropeproject/
+.vscode-server/
+.history/
+
+# ========================
+# OS
+# ========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.lnk
+
+# ========================
+# 测试 & 覆盖率
+# ========================
+.pytest_cache/
+.coverage.*
+*.coverage.*
+htmlcov/
+.tox/
+
+# ========================
+# 打包 & 临时文件
+# ========================
+*.tar.gz
+*.zip
+*.7z
+*.tmp
+*.bak
+*.orig
+*.py[co]

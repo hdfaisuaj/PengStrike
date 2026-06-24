@@ -1,0 +1,72 @@
+# PengStrike 渗透测试报告
+
+## 会话信息
+
+| 字段 | 值 |
+|------|-----|
+| **会话 ID** | {{ id }} |
+| **目标** | {{ target }} |
+| **状态** | {{ status }} |
+| **当前阶段** | {{ phase }} |
+| **创建时间** | {{ created_at }} |
+| **更新时间** | {{ updated_at }} |
+| **报告生成时间** | {{ generated_at }} |
+| **执行步骤数** | {{ steps_count }} |
+
+---
+
+## 执行摘要
+
+本次渗透测试针对目标 **{{ target }}**，共执行 **{{ steps_count }}** 个步骤，最终状态为 **{{ status }}**。
+
+---
+
+## 执行步骤详情
+
+{% for step in steps %}
+### 步骤 {{ step.seq }}: {{ step.action_type }}
+
+{% if step.from_state and step.to_state %}
+- **状态流转**: {{ step.from_state }} → {{ step.to_state }}
+{% endif %}
+{% if step.tool_name %}
+- **工具**: {{ step.tool_name }}
+{% endif %}
+{% if step.tool_args %}
+- **参数**: `{{ step.tool_args | tojson }}`
+{% endif %}
+{% if step.tool_success is not none %}
+- **执行结果**: {{ '✅ 成功' if step.tool_success else '❌ 失败' }}
+{% endif %}
+{% if step.tool_duration %}
+- **耗时**: {{ step.tool_duration }}秒
+{% endif %}
+{% if step.tool_output_summary %}
+- **输出摘要**: 
+  ```
+  {{ step.tool_output_summary[:500] }}
+  ```
+{% endif %}
+{% if step.llm_content %}
+- **LLM 分析**:
+  ```
+  {{ step.llm_content[:500] }}
+  ```
+{% endif %}
+{% if step.created_at %}
+- **时间**: {{ step.created_at }}
+{% endif %}
+
+{% if not loop.last %}---{% endif %}
+{% endfor %}
+
+---
+
+## 结论
+
+- **目标**: {{ target }}
+- **最终状态**: {{ status }}
+- **总执行步骤**: {{ steps_count }}
+- **报告生成时间**: {{ generated_at }}
+
+*报告由 PengStrike 自动生成*
