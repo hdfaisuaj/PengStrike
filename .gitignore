@@ -120,4 +120,4 @@ htmlcov/
 *.tmp
 *.bak
 *.orig
-*.py[co]
+*.py[co].pengstrike/

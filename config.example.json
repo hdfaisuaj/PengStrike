@@ -1,0 +1,45 @@
+{
+  "llm": {
+    "base_url": "https://api.openrouter.ai/api/v1",
+    "api_key": "YOUR_LLM_API_KEY_HERE",
+    "model": "anthropic/claude-3.5-sonnet",
+    "temperature": 0.1,
+    "max_tokens": 2048,
+    "timeout": 60,
+    "max_retries": 3,
+    "fallback_base_url": "",
+    "fallback_api_key": "",
+    "fallback_model": "",
+    "fallback_provider": ""
+  },
+  "security": {
+    "ast_enabled": true,
+    "anomaly_detection_enabled": true
+  },
+  "system": {
+    "command_timeout": 300,
+    "log_level": "INFO",
+    "llm_max_tokens": 1024,
+    "context_max_tokens": 4096,
+    "context_reserve_recent": 4
+  },
+  "backend": {
+    "host": "0.0.0.0",
+    "port": 8000,
+    "frontend_port": 5173
+  },
+  "llm_provider": "openrouter",
+  "llm_base_url": "https://api.openrouter.ai/api/v1",
+  "llm_model": "anthropic/claude-3.5-sonnet",
+  "multi_models": [
+    {
+      "model": "anthropic/claude-3.5-sonnet",
+      "base_url": "https://api.openrouter.ai/api/v1"
+    }
+  ],
+  "multi_model_auto_switch": true,
+  "multi_model_switch_429_count": 3,
+  "context_max_tokens": 4096,
+  "llm_max_tokens": 2048,
+  "stage_timeout": 300
+}
