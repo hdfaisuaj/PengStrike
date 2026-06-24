@@ -157,9 +157,9 @@ async def health_check():
 @app.get("/api/stats")
 async def get_stats():
     from tools.registry import get_registry
-    
+
     registry = get_registry()
-    
+
     # 数据库操作放在try-except中，避免缺少依赖导致整个接口失败
     session_count = 0
     completed_count = 0
@@ -169,10 +169,8 @@ async def get_stats():
         from sqlalchemy import func, select
         db = get_database()
         async with db.get_session() as session:
-            # 总会话数
             result = await session.execute(func.count(Session.id))
             session_count = result.scalar() or 0
-            # 已完成会话数
             result2 = await session.execute(
                 select(func.count(Session.id)).where(Session.status == "completed")
             )
@@ -180,7 +178,6 @@ async def get_stats():
     except Exception as e:
         logger.warning(f"数据库查询失败（不影响核心功能）: {e}")
 
-    # 报告数量
     report_count = 0
     try:
         from pathlib import Path
@@ -189,34 +186,16 @@ async def get_stats():
                 report_count += len([f for f in d.iterdir() if f.suffix in (".html", ".json")])
     except Exception:
         pass
-    
-    # 获取当前角色名称
-    current_role = get_current_role_name()
-    # 角色名称映射（用于显示）
-    role_display_names = {
-        "web_pentester": "Web渗透测试专家",
-        "internal_pentester": "内网渗透专家",
-        "vuln_scanner": "漏洞扫描专家",
-        "red_team": "红队作战专家",
-        "forensics": "取证分析专家"
-    }
-    current_role_name = role_display_names.get(current_role, current_role)
-    
+
     return {
         "tools": len(registry.list_all()),
-        "roles": len(role_registry.list_roles()),
-        "skills": len(skill_registry.list_skills()),
         "sessions": session_count,
         "completedTasks": completed_count,
         "totalReports": report_count,
-        "currentRole": current_role,
-        "currentRoleName": current_role_name,
         "version": "0.1.0-alpha",
         "uptime": get_system_uptime(),
         "uptime_seconds": get_system_uptime_seconds(),
     }
-
-
 @app.get("/api/activity")
 async def get_activity():
     """返回最近活动列表（会话事件 + 工具执行 + 报告生成）。"""
