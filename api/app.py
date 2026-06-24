@@ -26,7 +26,6 @@ from utils.logger import get_logger  # 确保日志系统在启动时初始化
 # 路由导入
 from api.session_routes import router as session_router
 from api.tool_routes import router as tool_router
-from api.role_routes import router as role_router
 from api.report_routes import router as report_router
 from api.config_routes import router as config_router
 from api.system_routes import router as system_router
@@ -158,12 +157,8 @@ async def health_check():
 @app.get("/api/stats")
 async def get_stats():
     from tools.registry import get_registry
-    from roles_skills.registry import RoleRegistry, SkillRegistry
-    from api.role_routes import get_current_role_name
     
     registry = get_registry()
-    role_registry = RoleRegistry()
-    skill_registry = SkillRegistry()
     
     # 数据库操作放在try-except中，避免缺少依赖导致整个接口失败
     session_count = 0

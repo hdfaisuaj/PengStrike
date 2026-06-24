@@ -4,8 +4,6 @@
 定义四类插件基类:
 - BasePlugin:     所有插件的根抽象基类
 - ToolPlugin:     工具插件（注册到 ToolRegistry）
-- SkillPlugin:    技能插件（注册到 SkillRegistry）
-- RolePlugin:     角色插件（注册到 RoleRegistry）
 - ReportPlugin:   报告插件（扩展报告生成功能）
 
 设计原则:
@@ -108,8 +106,6 @@ class SkillPlugin(BasePlugin):
 
     子类需实现:
     - metadata: 插件元信息
-    - on_load(): 加载时注册技能到 SkillRegistry
-    - on_unload(): 卸载时从 SkillRegistry 注销技能
     - get_skills(): 返回插件提供的技能类列表
     """
 
@@ -124,8 +120,6 @@ class RolePlugin(BasePlugin):
     子类需实现:
     - metadata: 插件元信息
     - on_load(): 加载时注册角色到 RoleRegistry
-    - on_unload(): 卸载时从 RoleRegistry 注销角色
-    - get_roles(): 返回插件提供的角色类列表
     """
 
     @abstractmethod

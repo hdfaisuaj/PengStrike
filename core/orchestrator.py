@@ -29,9 +29,6 @@ from core.security import SecurityGuard
 from core.state_manager import StateManager
 from utils.context_manager import ContextManager
 from utils.logger import get_logger
-from roles_skills.registry import RoleRegistry, SkillRegistry
-from roles_skills.base_role import BaseRole
-from roles_skills.base_skill import BaseSkill
 from tools.base_tool import ToolResult
 
 # AutoPilot 新引擎 (重构方案)
@@ -142,8 +139,6 @@ class Orchestrator:
         # Phase 4: 角色/技能系统
         self._role_name: str = role_name
         self._role: Optional[BaseRole] = None
-        self._role_registry = RoleRegistry()
-        self._skill_registry = SkillRegistry()
         self._jinja_env = Environment()
 
         # Phase 5: 插件管理器

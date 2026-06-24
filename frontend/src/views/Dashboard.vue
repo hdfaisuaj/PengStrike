@@ -95,7 +95,6 @@
             </div>
             <div class="status-item">
               <span class="status-label">当前角色</span>
-              <el-tag type="info" size="small" effect="plain">{{ currentRole || '未设置' }}</el-tag>
             </div>
             <div class="status-item">
               <span class="status-label">运行时长</span>
@@ -139,7 +138,6 @@ const stats = ref({
 
 const activities = ref([])
 const backendStatus = ref(false)
-const currentRole = ref('')
 const uptime = ref('计算中...')
 let uptimeTimer = null
 let uptimeBaseSeconds = 0
@@ -190,7 +188,6 @@ async function fetchDashboard() {
       completedTasks: data.completedTasks || 0,
       totalReports: data.totalReports || 0
     }
-    currentRole.value = data.currentRoleName || data.currentRole || savedRole || 'web_pentester'
     
     // 使用后端返回的真实运行时长
     uptimeBaseSeconds = data.uptime_seconds || parseInt(savedUptime) || 0
@@ -198,7 +195,6 @@ async function fetchDashboard() {
   } catch (e) {
     console.error('获取统计失败（不影响健康状态）:', e)
     // 后端不可用时使用localStorage数据
-    currentRole.value = savedRole || 'web_pentester'
     
     // 计算运行时长：如果有开始时间，计算差值；否则使用保存的时长
     if (savedStartTime) {

@@ -34,9 +34,6 @@ const routes = [
         component: () => import('../views/ToolList.vue')
       },
       {
-        path: 'roles',
-        name: 'RoleList',
-        component: () => import('../views/RoleList.vue')
       },
       {
         path: 'reports',

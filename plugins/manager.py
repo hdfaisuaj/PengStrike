@@ -4,7 +4,6 @@
 核心职责:
 - 自动扫描 plugins/ 目录下的所有插件
 - 热加载 / 热卸载插件
-- 将插件注册到对应的注册表 (ToolRegistry / SkillRegistry / RoleRegistry)
 - 依赖解析与按序加载
 - 加载失败的插件记录明确错误日志
 
@@ -255,11 +254,8 @@ class PluginManager:
     def _register_to_registries(self, plugin: BasePlugin) -> None:
         """将插件提供的工具/技能/角色注册到对应注册表。"""
         from tools.registry import ToolRegistry
-        from roles_skills.registry import RoleRegistry, SkillRegistry
 
         tool_registry = ToolRegistry()
-        role_registry = RoleRegistry()
-        skill_registry = SkillRegistry()
 
         if isinstance(plugin, ToolPlugin):
             for tool_cls in plugin.get_tools():
@@ -288,11 +284,8 @@ class PluginManager:
     def _unregister_from_registries(self, plugin: BasePlugin) -> None:
         """从注册表中注销插件提供的工具/技能/角色。"""
         from tools.registry import ToolRegistry
-        from roles_skills.registry import RoleRegistry, SkillRegistry
 
         tool_registry = ToolRegistry()
-        role_registry = RoleRegistry()
-        skill_registry = SkillRegistry()
 
         if isinstance(plugin, ToolPlugin):
             for tool_cls in plugin.get_tools():
