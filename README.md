@@ -1,6 +1,6 @@
 # PengStrike
 
-[![Version](https://img.shields.io/badge/version-v0.1.0--alpha-orange)](https://github.com/yourusername/PengStrike)
+[![Version](https://img.shields.io/badge/version-v0.1.0--alpha-orange)](https://github.com/hdfaisuaj/PengStrike)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.9+-blue)](https://www.python.org/)
 [![Vue](https://img.shields.io/badge/vue-3.0+-green)](https://vuejs.org/)# PengStrike
@@ -103,7 +103,7 @@ PengStrike/
 
 ```bash
 # 1. 克隆项目
-git clone https://github.com/yourusername/PengStrike.git
+git clone https://github.com/hdfaisuaj/PengStrike.git
 cd PengStrike
 
 # 2. 配置 Python 虚拟环境
@@ -123,7 +123,7 @@ export PENGSTRIKE_LLM_API_KEY="your-api-key-here"
 export PENGSTRIKE_LLM_BASE_URL="https://your-llm-endpoint"
 
 # 5. 启动服务
-bash Pentest-Web.sh
+bash PengStrike-Web.sh
 ```
 
 服务启动后，访问 `http://127.0.0.1:5173` 进入前端界面。
