@@ -230,9 +230,9 @@ generate_start_scripts() {
 
     SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-    cat > Pentest-Web.sh << 'EOF'
+    cat > PengStrike-Web.sh << 'EOF'
 #!/bin/bash
-# Pentest-Web.sh — 一键启动脚本（Ctrl+C 停止所有服务）
+# PengStrike-Web.sh — 一键启动脚本（Ctrl+C 停止所有服务）
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -335,7 +335,7 @@ echo "🟢 服务运行中...（按 Ctrl+C 停止）"
 wait
 
 EOF
-    chmod +x Pentest-Web.sh
+    chmod +x PengStrike-Web.sh
 
     log_ok "启动脚本生成完成"
     show_progress 90
@@ -431,10 +431,10 @@ print_finish() {
     echo "╚════════════════════════════════════════════════════════════╝"
     echo ""
     echo " 启动方式："
-    [[ -f "Pentest-Web.sh" ]] && echo -e "   ${BLUE}./Pentest-Web.sh${NC}   — 一键启动 Web 界面"
+    [[ -f "PengStrike-Web.sh" ]] && echo -e "   ${BLUE}./PengStrike-Web.sh${NC}   — 一键启动 Web 界面"
     echo ""
     echo "⚙️  首次使用："
-    echo "   1. 运行 ./Pentest-Web.sh 启动服务"
+    echo "   1. 运行 ./PengStrike-Web.sh 启动服务"
     echo "   2. 浏览器访问 http://127.0.0.1:5173"
     echo "   3. 进入【设置】页面，配置 LLM API"
     echo "      - 填写 API 地址、API Key、模型名称"
