@@ -1,5 +1,5 @@
 #!/bin/bash
-# Pentest-Web.sh — 一键启动脚本（Ctrl+C 停止所有服务）
+# PengStrike-Web.sh — 一键启动脚本（Ctrl+C 停止所有服务）
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
