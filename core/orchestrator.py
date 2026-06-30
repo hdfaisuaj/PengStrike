@@ -104,6 +104,18 @@ def _smart_truncate(text: str, max_chars: int = 3000, head: int = 1000, tail: in
     return f"{head_text}\n[... PengStrike 智能截断：已省略 {len(text) - head - tail} 字符，保留首尾关键信息 ...]\n{tail_text}"
 
 
+
+class _StubRegistry:
+    """Stub for removed roles_skills module — returns empty results."""
+    def get_role(self, name):
+        return None
+    def list_roles(self):
+        return []
+    def get_skill(self, name):
+        return None
+    def list_skills(self):
+        return []
+
 class Orchestrator:
     """PengStrike 编排核心 (Phase 4: FSM + 角色/技能/权限融合)."""
 
