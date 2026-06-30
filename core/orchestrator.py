@@ -152,6 +152,8 @@ class Orchestrator:
         self._role_name: str = role_name
         self._role: Optional[BaseRole] = None
         self._jinja_env = Environment()
+        self._role_registry = _StubRegistry()
+        self._skill_registry = _StubRegistry()
 
         # Phase 5: 插件管理器
         self._plugin_manager: Optional[Any] = None
@@ -162,29 +164,8 @@ class Orchestrator:
         except Exception as exc:
             logger.debug("[Orchestrator] 插件管理器初始化跳过: %s", exc)
 
-        # 强制角色加载：优先使用指定角色，否则使用默认角色
-        role = self._role_registry.get_role(role_name)
-        if role is None:
-            self.console.print(f"[bold yellow]⚠️ 角色 '{role_name}' 未找到，尝试加载默认角色...[/bold yellow]")
-            # 尝试使用第一个可用角色作为兜底
-            available_roles = self._role_registry.list_roles()
-            if available_roles:
-                fallback = available_roles[0]
-                role = self._role_registry.get_role(fallback)
-                if role:
-                    self._role = role
-                    self._role_name = fallback
-                    self.console.print(f"[bold green]✅ 使用兜底角色: {role.name} - {role.description}[/bold green]")
-            if self._role is None:
-                raise RuntimeError(
-                    f"❌ 角色 '{role_name}' 不存在，且无可用兜底角色。"
-                    f"可用角色: {', '.join(available_roles) if available_roles else '无'}"
-                )
-        else:
-            self._role = role
-            self._role_name = role_name
-            self.console.print(f"[bold green]✅ 角色已加载: {role.name} - {role.description}[/bold green]")
-
+        # roles_skills deleted
+        self._role = None
         # AutoPilot 状态
         self.autopilot: bool = False
         self.autopilot_max_steps: int = self.settings.autopilot_max_steps
@@ -197,65 +178,6 @@ class Orchestrator:
         # Phase 3: 异步任务跟踪
         self._fsm_timeout_task: Optional[asyncio.Task] = None
         self._db_initialized: bool = False
-
-    # ------------------------------------------------------------------
-    # Phase 4: 角色管理
-    # ------------------------------------------------------------------
-    def switch_role(self, role_name: str) -> bool:
-        """切换当前角色。"""
-        old_role = self._role.name if self._role else None
-        role = self._role_registry.get_role(role_name)
-        if role is None:
-            self.console.print(f"[bold red]❌ 角色 '{role_name}' 不存在[/bold red]")
-            return False
-
-        self._role = role
-        self._role_name = role_name
-        self.console.print(f"[bold green]🔄 角色已切换: {role.name}[/bold green]")
-        logger.info("role_switch: old_role=old_role, new_role=role_name")
-
-        rendered = self._render_system_prompt()
-        if rendered:
-            self._update_llm_system_prompt(rendered)
-        return True
-
-    def get_current_role(self) -> Optional[BaseRole]:
-        return self._role
-
-    def list_roles(self) -> List[str]:
-        return self._role_registry.list_roles()
-
-    def list_skills(self) -> List[str]:
-        return self._skill_registry.list_skills()
-
-    def _render_system_prompt(self) -> Optional[str]:
-        if not self._role:
-            return None
-
-        try:
-            template = self._jinja_env.from_string(self._role.system_prompt_template)
-            role_prompt = template.render(
-                role=self._role,
-                session={
-                    "target": self.state_manager.current_target or "",
-                    "history": self.state_manager.get_history_summary() or "",
-                },
-                state={"current_phase": self.fsm.state},
-            )
-            # 分层合并：核心规则 + 角色人设
-            return f"{SYSTEM_PROMPT}\n\n# 角色人设\n{role_prompt}"
-        except Exception as exc:
-            logger.warning("[Jinja2] 模板渲染失败: %s, 使用原始模板", exc)
-            return f"{SYSTEM_PROMPT}\n\n# 角色人设\n{self._role.system_prompt_template}"
-
-    def _update_llm_system_prompt(self, prompt: str) -> None:
-        """替换 LLM client 中的 system prompt。"""
-        if hasattr(self.llm_client, "system_prompt") and prompt:
-            self.llm_client.system_prompt = prompt
-            if self.llm_client.messages and self.llm_client.messages[0].get("role") == "system":
-                self.llm_client.messages[0]["content"] = prompt
-            else:
-                self.llm_client.messages.insert(0, {"role": "system", "content": prompt})
 
     # ------------------------------------------------------------------
     # Phase 4: 工具调用（带权限检查）
@@ -290,42 +212,6 @@ class Orchestrator:
 
     # ------------------------------------------------------------------
     # Phase 4: 技能调用（带权限检查）
-    # ------------------------------------------------------------------
-    async def call_skill(self, skill_name: str, **kwargs) -> ToolResult:
-        """调用技能 — 带角色权限检查。"""
-        sid = self.state_manager.session_id
-
-        if self._role and not self._role.can_use_skill(skill_name):
-            logger.info("skill_call: skill_name=skill_name, params=kwargs, success=False, session_id=sid")
-            return ToolResult(
-                success=False,
-                error=f"角色 '{self._role.name}' 无权使用技能 '{skill_name}'",
-                tool_name=skill_name,
-            )
-
-        skill = self._skill_registry.get_skill(skill_name)
-        if skill is None:
-            logger.info("skill_call: skill_name=skill_name, params=kwargs, success=False, session_id=sid")
-            return ToolResult(
-                success=False,
-                error=f"技能 '{skill_name}' 不存在",
-                tool_name=skill_name,
-            )
-
-        try:
-            result = await skill.run(orchestrator=self, **kwargs)
-            logger.info("skill_call: skill_name=skill_name, params=kwargs, success=result.success, session_id=sid")
-            return result
-        except Exception as exc:
-            logger.info("skill_call: skill_name=skill_name, params=kwargs, success=False, session_id=sid")
-            return ToolResult(
-                success=False,
-                error=f"技能 '{skill_name}' 执行异常: {exc}",
-                tool_name=skill_name,
-            )
-
-    # ------------------------------------------------------------------
-    # FSM 回调
     # ------------------------------------------------------------------
     def _on_fsm_enter(self) -> None:
         """进入新状态时的回调。"""
@@ -407,7 +293,7 @@ class Orchestrator:
         self.console.print(f"[bold green]✅ 新会话已创建: {session_id} (目标: {target})[/bold green]")
         self.console.print(f"[dim]  FSM 初始状态: {self.fsm.state}[/dim]")
 
-        if self._role:
+        if self._role is not None:  # stub
             self.console.print(f"[dim]  当前角色: {self._role.name}[/dim]")
             rendered = self._render_system_prompt()
             if rendered:
@@ -464,7 +350,7 @@ class Orchestrator:
             history_len=len(self.llm_client.messages),
         )
         self.console.print(f"[dim]  {self.fsm.print_state()}[/dim]")
-        if self._role:
+        if self._role is not None:  # stub
             self.console.print(f"[dim]  当前角色: [bold]{self._role.name}[/bold] — {self._role.description}[/dim]")
 
     def clear_context(self) -> None:
@@ -850,7 +736,7 @@ class Orchestrator:
             self.autopilot = False
             self.console.print("[bold yellow]🛑 AutoPilot 已暂停（Ctrl+C 中断），回到手动模式。[/bold yellow]")
 
-        if self._role:
+        if self._role is not None:  # stub
             rendered = self._render_system_prompt()
             if rendered:
                 self._update_llm_system_prompt(rendered)
